@@ -5,7 +5,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cn.edu.gdmec.android.testboxuegu.bean.UserBean;
+import cn.edu.gdmec.android.testboxuegu.bean.VideoBean;
 import cn.edu.gdmec.android.testboxuegu.sqlite.SQLiteHelper;
 
 /**
@@ -52,6 +56,66 @@ public class DBUtils {
     }
 
     public void updateUserInfo(String key,String value,String userName){
+        ContentValues cv = new ContentValues();
+        cv.put(key, value);
+        db.update(SQLiteHelper.U_USERINFO,cv,"userName=?",new String[]{userName});
+    }
 
+    public void saveVideoPlayList(VideoBean bean, String userName){
+        if (hasVideoPlay(bean.chapterId,bean.videoId,userName)){
+            boolean isDelete = delVideoPlay(bean.chapterId,bean.videoId,userName);
+            if (!isDelete){
+                return;
+            }
+        }
+        ContentValues cv = new ContentValues();
+        cv.put("userName",userName);
+        cv.put("chapterId",bean.chapterId);
+        cv.put("videoId",bean.videoId);
+        cv.put("videoPath",bean.videoPath);
+        cv.put("title",bean.title);
+        cv.put("secondTitle",bean.secondTitle);
+        db.insert(SQLiteHelper.U_VIDEO_PLAY_LIST,null,cv);
+    }
+
+    public boolean hasVideoPlay(int chapterId,int videoId,String useName){
+        boolean hasVideo = false;
+        String sql= "SELECT * FROM " + SQLiteHelper.U_VIDEO_PLAY_LIST + "WHERE chapterI=? AND videoId=? AND userName=?";
+        Cursor cursor = db.rawQuery(sql,new String[] {chapterId + "",videoId + "",useName});
+        if (cursor.moveToFirst()){
+            hasVideo = true;
+        }
+        cursor.close();
+        return hasVideo;
+    }
+
+    public boolean delVideoPlay(int chapterId,int videoId,String useName){
+        boolean delSuccess = false;
+        int row = db.delete(SQLiteHelper.U_VIDEO_PLAY_LIST,
+                "chapterId=? AND videoId=? AND userName=?",new String[]{ chapterId + "",
+                videoId + "",useName});
+        if (row>0){
+            delSuccess=true;
+        }
+        return delSuccess;
+    }
+
+    public List<VideoBean> getVideoHistory(String userName){
+        String sql = "SELECT * FROM " + SQLiteHelper.U_VIDEO_PLAY_LIST + " WHERE userName=?";
+        Cursor cursor = db.rawQuery(sql,new String[]{userName});
+        List<VideoBean> vbl = new ArrayList<>();
+        VideoBean bean = null;
+        while (cursor.moveToNext()){
+            bean =new VideoBean();
+            bean.chapterId = cursor.getInt(cursor.getColumnIndex("chapterId"));
+            bean.videoId=cursor.getInt(cursor.getColumnIndex("videoId"));
+            bean.videoPath=cursor.getString(cursor.getColumnIndex("videoPath"));
+            bean.title=cursor.getString(cursor.getColumnIndex("title"));
+            bean.secondTitle=cursor.getString(cursor.getColumnIndex("secondTitle"));
+            vbl.add(bean);
+            bean=null;
+        }
+        cursor.close();
+        return vbl;
     }
 }
