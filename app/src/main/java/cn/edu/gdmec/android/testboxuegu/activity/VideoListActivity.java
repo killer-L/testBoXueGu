@@ -68,7 +68,8 @@ public class VideoListActivity extends AppCompatActivity implements View.OnClick
                 String videoPath = bean.videoPath;
                 adapter.notifyDataSetChanged();
                 if (TextUtils.isEmpty(videoPath)){
-                    Toast.makeText(VideoListActivity.this,"本地没有此视频，暂无法播放",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(VideoListActivity.this,
+                            "本地没有此视频，暂无法播放",Toast.LENGTH_SHORT).show();
                     return;
                 }else{
                     if (readLoginStatus()){
@@ -102,12 +103,12 @@ public class VideoListActivity extends AppCompatActivity implements View.OnClick
             is = getResources().getAssets().open("data.json");
             jsonArray = new JSONArray(read(is));
             videoList = new ArrayList<VideoBean>();
-            for (int i = 0;i > jsonArray.length();i++){
+            for (int i = 0;i < jsonArray.length();i++){
                 VideoBean bean = new VideoBean();
                 JSONObject jsonObj = jsonArray.getJSONObject(i);
                 if (jsonObj.getInt("chapterId")==chapterId){
                     bean.chapterId = jsonObj.getInt("chapterId");
-                    bean.videoId = Integer.parseInt(jsonObj.getString("videoId"));
+                    bean.videoId=Integer.parseInt(jsonObj.getString("videoId"));
                     bean.title = jsonObj.getString("title");
                     bean.secondTitle = jsonObj.getString("secondTitle");
                     bean.videoPath = jsonObj.getString("videoPath");
@@ -149,7 +150,8 @@ public class VideoListActivity extends AppCompatActivity implements View.OnClick
     }
 
     private boolean readLoginStatus(){
-        SharedPreferences sp = getSharedPreferences("loginInfo", Context.MODE_PRIVATE);
+        SharedPreferences sp = getSharedPreferences("loginInfo",
+                Context.MODE_PRIVATE);
         boolean isLogin = sp.getBoolean("isLogin",false);
         return isLogin;
     }
@@ -189,6 +191,8 @@ public class VideoListActivity extends AppCompatActivity implements View.OnClick
                 tv_intro.setTextColor(Color.parseColor("#000000"));
                 tv_video.setTextColor(Color.parseColor("#FFFFFF"));
                 break;
+                default:
+                    break;
         }
 
     }

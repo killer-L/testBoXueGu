@@ -17,11 +17,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import cn.edu.gdmec.android.testboxuegu.R;
+import cn.edu.gdmec.android.testboxuegu.view.CourseView;
 import cn.edu.gdmec.android.testboxuegu.view.ExerciseView;
+import cn.edu.gdmec.android.testboxuegu.view.MyInfoView;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     private ExerciseView mExerciseView;
+    private CourseView mCourseView;
+    private MyInfoView mMyInfoView;
     private FrameLayout mBodyLayout;
     private LinearLayout mBottomLayout;
 
@@ -88,6 +92,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.bottom_bar_myinfo_btn:
                 clearBottomImageState();
                 selectDisplayView(2);
+                if (mMyInfoView != null){
+                    mMyInfoView.setLoginParams(readLoginStatus());
+                }
                 break;
             default:
                 break;
@@ -116,21 +123,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case 0:
                 mCourseBtn.setSelected(true);
                 iv_course.setImageResource(R.drawable.main_course_icon_selected);
-                tv_course.setTextColor(Color.parseColor("#0097f7"));
+                tv_course.setTextColor(Color.parseColor("#0097F7"));
                 rl_title_bar.setVisibility(View.VISIBLE);
                 tv_main_title.setText("博学谷课程");
                 break;
             case 1:
                 mExercisesBtn.setSelected(true);
                 iv_exercises.setImageResource(R.drawable.main_exercises_icon_selected);
-                tv_exercises.setTextColor(Color.parseColor("#0097f7"));
+                tv_exercises.setTextColor(Color.parseColor("#0097F7"));
                 rl_title_bar.setVisibility(View.VISIBLE);
                 tv_main_title.setText("博学谷习题");
                 break;
             case 2:
                 mMyInfoBtn.setSelected(true);
                 iv_myInfo.setImageResource(R.drawable.main_my_icon_selected);
-                tv_myInfo.setTextColor(Color.parseColor("#0097f7"));
+                tv_myInfo.setTextColor(Color.parseColor("#0097F7"));
                 rl_title_bar.setVisibility(View.GONE);
         }
     }
@@ -147,15 +154,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private void selectDisplayView(int i) {
+    private void selectDisplayView(int index) {
         removeAllView();
-        createView(i);
-        setSelectedStatus(i);
+        createView(index);
+        setSelectedStatus(index);
     }
 
-    private void createView(int i) {
-        switch (i){
+    private void createView(int viewIndex) {
+        switch (viewIndex){
             case 0:
+                if (mCourseView == null){
+                    mCourseView = new CourseView(this);
+                    mBodyLayout.addView(mCourseView.getView());
+                }else{
+                    mCourseView.getView();
+                }
+                mCourseView.showView();
                 break;
             case 1:
                 if (mExerciseView == null){
@@ -167,6 +181,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mExerciseView.showView();
                 break;
             case 2:
+                if (mMyInfoView == null){
+                    mMyInfoView = new MyInfoView(this);
+                    mBodyLayout.addView(mMyInfoView.getView());
+                }else {
+                    mMyInfoView.getView();
+                }
+                mMyInfoView.showView();
                 break;
         }
     }
@@ -179,6 +200,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (isLogin){
                 clearBottomImageState();
                 selectDisplayView(0);
+            }
+            if (mMyInfoView != null){
+                mMyInfoView.setLoginParams(isLogin);
             }
         }
     }

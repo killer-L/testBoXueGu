@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 
 public class SQLiteHelper extends SQLiteOpenHelper {
-    private static final int DB_VERSION=1;
+    private static final int DB_VERSION = 1;
     public static String DB_NAME = "bxg.db";
     public static final String U_USERINFO="userinfo";
     public static final String U_VIDEO_PLAY_LIST = "videoplaylist";
@@ -20,7 +20,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE IF NOT EXISTS" + U_USERINFO +"("
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + U_USERINFO + "("
                 + "_id INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + "userName VARCHAR, "
                 + "nickName VARCHAR, "
@@ -28,7 +28,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                 + "signature VARCHAR"
                 + ")");
 
-        db.execSQL("CREATE TABLE IF NOT EXISTS" + U_VIDEO_PLAY_LIST +"("
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + U_VIDEO_PLAY_LIST + "("
                 + "_id INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + "userName VARCHAR, "
                 + "chapterId INT, "
@@ -36,13 +36,13 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                 + "videoPath VARCHAR, "
                 + "title VARCHAR, "
                 + "secondTitle VARCHAR"
-                + ")");
+                + ")" );
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + U_USERINFO);
-        db.execSQL("DROP TABLE IF EXISTS " + U_VIDEO_PLAY_LIST);
+        db.execSQL("DROP TABLE IF EXISTS " + U_USERINFO );
+        db.execSQL("DROP TABLE IF EXISTS " + U_VIDEO_PLAY_LIST );
         onCreate(db);
     }
 }

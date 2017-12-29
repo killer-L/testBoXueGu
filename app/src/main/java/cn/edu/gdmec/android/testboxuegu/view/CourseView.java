@@ -1,19 +1,27 @@
 package cn.edu.gdmec.android.testboxuegu.view;
 
+import android.app.Activity;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ListView;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.edu.gdmec.android.testboxuegu.R;
 import cn.edu.gdmec.android.testboxuegu.adapter.AdBannerAdapter;
 import cn.edu.gdmec.android.testboxuegu.adapter.CourseAdapter;
 import cn.edu.gdmec.android.testboxuegu.bean.CourseBean;
+import cn.edu.gdmec.android.testboxuegu.utils.AnalysisUtils;
 
 /**
  * Created by student on 17/12/27.
@@ -34,7 +42,6 @@ public class CourseView {
     private ViewPagerIndicator vpi;
     private MHandler mHandler;
     private List<CourseBean> cadl;
-    private Object courseData;
 
     public CourseView(FragmentActivity context){
         mContext = context;
@@ -81,8 +88,62 @@ public class CourseView {
     }
 
     private void initView(){
+        mCurrentView = mInflater.inflate(R.layout.main_view_course,null);
+        lv_list = (ListView)mCurrentView.findViewById(R.id.lv_list);
+        adapter = new CourseAdapter(mContext);
+        adapter.setData(cbl);
+        lv_list.setAdapter(adapter);
+        adPager = (ViewPager)mCurrentView.findViewById(R.id.vp_advertBanner);
+        adPager.setLongClickable(false);
+        ada = new AdBannerAdapter(mContext.getSupportFragmentManager(),mHandler);
+        adPager.setAdapter(ada);
+        adPager.setOnTouchListener(ada);
+        vpi = (ViewPagerIndicator)mCurrentView.findViewById(R.id.vpi_advert_indicator);
+        vpi.setCount(ada.getSize());
+        adBannerLay = mCurrentView.findViewById(R.id.rl_adBanner);
+        adPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener( ) {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (ada.getSize()>0){
+                    vpi.setCurrentPosition(position%ada.getSize());
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+        resetSize();
+        if (cadl != null){
+            vpi.setCount(cadl.size());
+            vpi.setCurrentPosition(0);
+        }
+        ada.setDatas(cadl);
 
     }
+
+    private void resetSize() {
+        int sw = getScreenWith(mContext);
+        int adLheight = sw / 2;
+        ViewGroup.LayoutParams adlp = adBannerLay.getLayoutParams();
+        adlp.width = sw;
+        adlp.height = adLheight;
+        adBannerLay.setLayoutParams(adlp);
+    }
+
+    public static int getScreenWith(Activity context){
+        DisplayMetrics metrics = new DisplayMetrics();
+        Display display = context.getWindowManager().getDefaultDisplay();
+        display.getMetrics(metrics);
+        return metrics.widthPixels;
+    }
+
     private void initAdData() {
         cadl = new ArrayList<CourseBean>();
         for (int i = 0;i<3;i++){
@@ -106,7 +167,13 @@ public class CourseView {
     }
 
     private void getCourseData(){
-        
+        try {
+            InputStream is = mContext.getResources().getAssets().open("chaptertitle.xml");
+            cbl = AnalysisUtils.getCourseInfos(is);
+        } catch (Exception e) {
+            e.printStackTrace( );
+        }
+
     }
 
     public View getView(){

@@ -62,10 +62,12 @@ public class FindPswActivity extends AppCompatActivity {
                 String validateName = et_validate_name.getText().toString().trim();
                 if ("security".equals(from)){
                     if (TextUtils.isEmpty(validateName)){
-                        Toast.makeText(FindPswActivity.this,"请输入要验证的姓名",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(FindPswActivity.this,"请输入要验证的姓名",
+                                Toast.LENGTH_SHORT).show();
                         return;
                     }else{
-                        Toast.makeText(FindPswActivity.this,"密保设置成功",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(FindPswActivity.this,"密保设置成功",
+                                Toast.LENGTH_SHORT).show();
                         saveSecurity(validateName);
                         FindPswActivity.this.finish();
                         }
@@ -73,16 +75,20 @@ public class FindPswActivity extends AppCompatActivity {
                     String userName = et_user_name.getText().toString().trim();
                     String sp_security = readSecurity(userName);
                     if (TextUtils.isEmpty(userName)){
-                        Toast.makeText(FindPswActivity.this,"请输入您的用户名",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(FindPswActivity.this,"请输入您的用户名",
+                                Toast.LENGTH_SHORT).show();
                         return;
                     }else if (!isExistUserName(userName)){
-                        Toast.makeText(FindPswActivity.this,"您输入的用户名不存在",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(FindPswActivity.this,"您输入的用户名不存在",
+                                Toast.LENGTH_SHORT).show();
                         return;
                     }else if (TextUtils.isEmpty(validateName)){
-                        Toast.makeText(FindPswActivity.this,"请输入要验证的姓名",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(FindPswActivity.this,"请输入要验证的姓名",
+                                Toast.LENGTH_SHORT).show();
                         return;
                     }if (!validateName.equals(sp_security)){
-                        Toast.makeText(FindPswActivity.this,"输入的密保不正确",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(FindPswActivity.this,"输入的密保不正确",
+                                Toast.LENGTH_SHORT).show();
                         return;
                     }else{
                         tv_reset_psw.setVisibility(View.VISIBLE);
@@ -110,7 +116,7 @@ public class FindPswActivity extends AppCompatActivity {
 
     private String readSecurity(String userName){
         SharedPreferences sp = getSharedPreferences("loginInfo",MODE_PRIVATE);
-        String security = sp.getString(userName+"_security_","");
+        String security = sp.getString(userName+"_security","");
         return security;
     }
     private boolean isExistUserName(String userName){

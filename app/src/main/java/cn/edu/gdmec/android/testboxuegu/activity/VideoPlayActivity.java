@@ -22,8 +22,8 @@ public class VideoPlayActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_video_play);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         videoPath = getIntent().getStringExtra("videoPath");
@@ -43,7 +43,7 @@ public class VideoPlayActivity extends AppCompatActivity {
             Toast.makeText(this,"本地没有此视频，暂无法播放",Toast.LENGTH_SHORT).show();
             return;
         }
-        String uri = "android.resource://"+getPackageName() + "/" + R.raw.video11;
+        String uri = "android.resource://" + getPackageName() + "/" + R.raw.video11;
         videoView.setVideoPath(uri);
         videoView.start();
     }

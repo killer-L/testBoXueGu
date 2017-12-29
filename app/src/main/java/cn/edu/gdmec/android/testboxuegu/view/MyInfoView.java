@@ -90,7 +90,7 @@ public class MyInfoView {
             tv_user_name.setText(AnalysisUtils.readLoginUserName(mContext));
         }
         else{
-            tv_user_name.setText("请先登录");
+            tv_user_name.setText("点击登录");
         }
     }
     public View getView(){

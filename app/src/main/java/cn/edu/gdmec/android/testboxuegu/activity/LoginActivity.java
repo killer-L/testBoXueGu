@@ -26,6 +26,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText et_psw;
     private String userName;
     private String psw;
+    private String spPsw;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +63,8 @@ public class LoginActivity extends AppCompatActivity {
         tv_find_psw.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(LoginActivity.this,FindPswActivity.class);
+                startActivity(intent);
 
             }
         });
@@ -72,14 +75,14 @@ public class LoginActivity extends AppCompatActivity {
                 userName = et_user_name.getText().toString().trim();
                 psw = et_psw.getText().toString().trim();
                 String md5Psw = MD5Utils.md5(psw);
-                String spPsw=readPsw(userName);
+                spPsw=readPsw(userName);
                 if (TextUtils.isEmpty(userName)){
                     Toast.makeText(LoginActivity.this,"请输入用户名",Toast.LENGTH_SHORT).show();
                     return;
                 }else if(TextUtils.isEmpty(psw)){
                     Toast.makeText(LoginActivity.this,"请输入密码",Toast.LENGTH_SHORT).show();
                     return;
-                }else if(!TextUtils.isEmpty(spPsw) && !md5Psw.equals(spPsw)){
+                }else if(spPsw!=null&&!TextUtils.isEmpty(spPsw) && !md5Psw.equals(spPsw)){
                     Toast.makeText(LoginActivity.this,"请输入的用户名和密码不一致",Toast.LENGTH_SHORT).show();
                     return;
                 }else if(md5Psw.equals(spPsw)){

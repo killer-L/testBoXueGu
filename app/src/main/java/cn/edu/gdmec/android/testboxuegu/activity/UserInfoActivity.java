@@ -32,7 +32,8 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
     private TextView tv_user_name;
     private TextView tv_sex;
     private TextView tv_signature;
-    private UserBean value;
+    private static final int CHANGE_NICKNAME = 1;
+    private static final int CHANGE_SIGNATURE = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +103,8 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
                 bdName.putString("content",name);
                 bdName.putString("title","昵称");
                 bdName.putInt("flag",1);
-                enterActivityForResult(ChangeUserInfoActivity.class,CHANGE_NICKNAME,bdName);
+                enterActivityForResult(ChangeUserInfoActivity.class,
+                        CHANGE_NICKNAME,bdName);
                 break;
             case R.id.rl_sex:
                 String sex = tv_sex.getText().toString();
@@ -114,7 +116,8 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
                 bdSignature.putString("content",signature);
                 bdSignature.putString("title","签名");
                 bdSignature.putInt("flag",2);
-                enterActivityForResult(ChangeUserInfoActivity.class,CHANGE_SIGNATURE,bdSignature);
+                enterActivityForResult(ChangeUserInfoActivity.class,
+                        CHANGE_SIGNATURE,bdSignature);
                 break;
             default:
                 break;
